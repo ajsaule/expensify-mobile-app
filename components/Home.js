@@ -1,14 +1,15 @@
 import React from 'react'
 import { View, Text, Image, StyleSheet, Button } from 'react-native'
-import { Link } from 'react-router-native'
+import { NativeRouter, Switch, Route, Link } from "react-router-native"
 
-export default function Home() {
+export default function Home({ history }) {
     return (
         <View>
-            <Text>Logo with splash image and clickthrough button</Text>
-            <Link to={'/tracker'}>
-                <Button>Log expenses</Button>
-            </Link>
+            <Text> Splash page with cool GIF animation thingy</Text>
+            <Button
+                title="Log expenses"
+                onPress={() => history.push('/tracker')}>
+            </Button>
         </View>
     )
 }

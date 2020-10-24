@@ -1,26 +1,31 @@
 import  React, { useState, useEffect } from 'react'
-import { View, Text, Image, StyleSheet, Button } from 'react-native'
-import { Link } from 'react-router-native'
+import { View, Text, Image, StyleSheet, Button, TextInput, FlatList } from 'react-native'
+// import { uuid } from 'uuidv4'
 
-export default function Events() {
+export default function Events({ history }) {
 
     const [expense, setExpense] = useState(null)
     const [expenseArr, setExpenseArr] = useState([])
     const [list, setList] = useState(null)
     
     const handleSubmit = (e) => {
-        let { name, value } = e.target // how do I reset the text field without using inner HTML ?? 
-        e.preventDefault()
+        let { name, value } = e // how do I reset the text field without using inner HTML ?? 
         expenseArr.push(expense)
         console.log(expenseArr)
+        printItems()
     }
     
     const handleChange = (e, stateObject) => {
-        const { name, value } = e.target
+        console.log(e)
+        const { name, value } = e 
+        console.log(name)
+        console.log(value)
         setExpense({ ...stateObject, [name]: value })
     }
 
     const printItems = () => {
+        // how can we simplify the loop here ? 
+        console.log(expenseArr)
         let output = expenseArr.map((item, key) => {
             return (
                 <Text key={key}>  
@@ -33,25 +38,28 @@ export default function Events() {
 
     const handleDelete = (e) => {
         e.target.style.opacity = 0
-    }
+    } 
 
     return (
         <View>
-            <Link to={'/'}>
-                <Button>Back</Button>
-            </Link>
+            <Button title="Back" onPress={() => history.push('/')}></Button>
             <Text>Calculate your expenses</Text>
-            <form onSubmit={handleSubmit}>
-                <Text>How much you spent</Text>
-                <input onChange={(e) => handleChange(e, expense)} name="amount" type="number" />
-                <Text>What did you spend it on</Text>
-                <input onChange={(e) => handleChange(e, expense)} name="type" type="text" />
-                <input onClick={printItems} type="submit" value="Log"/>
-            </form>
+            <Text>How much you spent</Text>
+            <TextInput onChangeText={(e) => handleChange(e, expense)} name="amount" type="number" />
+            <Text>What did you spend it on</Text>
+            <TextInput onChangeText={(e) => handleChange(e, expense)} name="type" type="text" />
+            <Button onPress={handleSubmit} type="submit" title="Log"/>
             <Text>Expenses</Text>
             <Text>
                 {list}
             </Text>
+            {/* <FlatList
+                data={expenseArr}
+                renderItem={({ expenseArr }) => (
+                    <Text>{expenseArr}</Text>
+                )}
+                keyExtractor={expenseArr => expenseArr.id}
+            /> */}
         </View>
     )
 }
